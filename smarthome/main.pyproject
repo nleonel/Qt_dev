@@ -1,0 +1,3 @@
+{
+    "files": ["PageBackground.qml","SecurityForm.ui.qml","Security.qml","Light.qml","View.qml","main.py","CustomLabel.qml","Heating.qml","WeatherForcast.py","HeatingForm.ui.qml","LightForm.ui.qml","logo.png","SideBarForm.ui.qml","main.qml","SideBar.qml"]
+}
