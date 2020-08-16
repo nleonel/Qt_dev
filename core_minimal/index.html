@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <title>My site Web</title>
+	<link href="css/site.css" rel="stylesheet">
+  </head>
+
+
+  <body onload>
+
+	<nav class="navbar navbar-expand-sm bg-light justify-content-center">
+
+	<!-- Brand/logo -->
+  	<a class="navbar-brand" href="qtlogo.svg">Logo</a>
+
+	  <ul class="navbar-nav">
+	    <li class="nav-item">
+	      <a class="nav-link" href="#">QT</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="#">Security Page</a>
+	    </li>
+	    <li class="nav-item">
+	      <a class="nav-link" href="#">Light</a>
+	    </li>
+	  </ul>
+	</nav>
+
+	<div class="jumbotron text-center">
+	  <h1>My First Bootstrap Page</h1>
+	  <p>Resize this responsive page to see the effect!</p> 
+	</div>
+
+   <div class="main-container">
+        <div class="cloud-image">
+            <img src="img/successCloudNew.svg" />
+        </div>
+        <div class="content">
+            <div class="tweet-container">
+            <a href="http://twitter.com/intent/tweet/?text=I%20just%20created%20a%20new%20HTML%20website%20on%20Azure%20using%20Azure%20DevOps%20Project&hashtags=AzureDevOpsProject%2CVSTS%20%40Azure%20%40VSTS">
+                <img src="img/tweetThis.svg" />
+            </a>            
+        </div>
+            <div class="content-body">
+                <div class="success-text">Success!</div>
+                <div class="description line-1"> Azure DevOps Project has been successfully setup</div>
+                <div class="description line-2"> Your HTML app is up and running on Azure</div>
+                <div class="next-steps-container">
+                    <div class="next-steps-header">Next up</div>
+                    <div class="next-steps-body">
+                        <div class="step">
+                            <div class="step-icon">
+                                <img src="img/cloneWhite.svg">
+                            </div>
+                            <div class="step-text"><a href="https://go.microsoft.com/fwlink/?linkid=862409">Clone your code repository and start developing your application on IDE of your choice</a></div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <img src="img/deployWhite.svg">
+                            </div>
+                        <div class="step-text"><a href="https://go.microsoft.com/fwlink/?linkid=862410">View your CI/CD pipeline on Visual Studio Team Services and customize it as per your needs</a></div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <img src="img/stackWhite.svg">
+                            </div>
+                            <div class="step-text"><a href="http://portal.azure.com">View your service stack in the Azure Portal</a></div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <img src="img/lightbulbWhite.svg">
+                            </div>
+                            <div class="step-text"><a href="https://go.microsoft.com/fwlink/?linkid=862126">Learn more about all you can do with Azure projects by visiting the documentation</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <script type='text/javascript'>
+        // Note: Qt currently uses the build mode where emscripten uses
+        // a global Module object, and loads and instantiates the wasm
+        // applicaiton module when its script is loaded. This happens for
+        // core_minimal.js below.
+        //
+        // Qt will at some point start setting -s MODULARIZE=1, which will
+        // change how this works (see emscripten documentation). Users of
+        // qtloader.js should not be affected by this change.
+        var Module = {
+            onRuntimeInitialized: _ => {
+                // Call C++ function
+                let result = Module.lerp(10, 20, 0.5);
+                console.log("JS: The result is " + result);
+            }
+        }
+    </script>
+    <script src="core_minimal.js"></script>
+        
+  </body>
+</html>
+
+
+
+
+
