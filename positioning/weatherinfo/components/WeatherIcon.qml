@@ -62,7 +62,7 @@ Item {
         id: img
         source: {
             if (useServerIcon)
-                "http://openweathermap.org/img/w/" + container.weatherIcon + ".png"
+                weatherIcon != "humidity" ? "http://openweathermap.org/img/w/" + container.weatherIcon + ".png" : "../icons/humidity.png"
             else {
                 switch (weatherIcon) {
                 case "01d":
@@ -101,6 +101,7 @@ Item {
                 case "50n":
                     "../icons/weather-fog.png"
                     break;
+
                 default:
                     "../icons/weather-unknown.png"
                 }

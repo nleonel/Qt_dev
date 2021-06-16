@@ -49,45 +49,134 @@
 ****************************************************************************/
 
 import QtQuick 2.0
+import QtQuick.Controls 2.13
 
 Item {
     id: current
 
     property string topText: "20*"
+    property string temp_min: "20*"
+    property string temp_max: "20*"
     property string bottomText: "Mostly cloudy"
     property string weatherIcon: "01d"
     property real smallSide: (current.width < current.height ? current.width : current.height)
+    property var val: 80
 
     Text {
+        height: 76
+        color: "#7d8fe8"
         text: current.topText
-        font.pointSize: 28
-        anchors {
-            top: current.top
-            left: current.left
-            topMargin: 5
-            leftMargin: 5
-        }
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        horizontalAlignment: Text.AlignHCenter
+        font.family: "Times New Roman"
+        anchors.leftMargin: 191
+        anchors.topMargin: 22
+        anchors.rightMargin: 259
+        font.pointSize: 100
+    }
+
+    Text {
+        id: txt
+        x: (parent.width - val)/2 -120
+        y: 160
+        width: 54
+        height: 28
+        color: "#7d8fe8"
+        text: "Max:"
+        // anchors.top: parent.top
+        horizontalAlignment: Text.AlignHCenter
+        anchors.topMargin: 101
+        font.family: "Times New Roman"
+        font.pointSize: 22
     }
 
     WeatherIcon {
         weatherIcon: current.weatherIcon
         useServerIcon: false
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: -15
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 30
+        anchors.rightMargin:  26
         width: current.smallSide
         height: current.smallSide
+        visible: true
+    }
+
+//    Text {
+//        x: (parent.width - val)/2 + 20
+//        y: 406
+//        text: current.bottomText
+//        //anchors.bottom: parent.bottom
+//        //anchors.right: parent.right
+//        font.pointSize: 15
+//        wrapMode: Text.WordWrap
+//        anchors.bottomMargin: 1
+//        width: parent.width
+//        horizontalAlignment: Text.AlignHCenter
+//        verticalAlignment: Text.AlignVCenter
+////        anchors {
+////            right: current.center
+////            rightMargin: 5
+////        }
+//    }
+    Text {
+        id: t
+        x: (parent.width - val)/2 - 48
+        y: 220
+        height: 31
+        color: "#7d8fe8"
+        text: current.bottomText
+        horizontalAlignment: Text.AlignHCenter
+        width: parent.width/4 - 2*val
+        verticalAlignment: Text.AlignVCenter
+        font.family: "Times New Roman"
+        font.pointSize: 15
     }
 
     Text {
-        text: current.bottomText
-        font.pointSize: 23
-        wrapMode: Text.WordWrap
-        width: parent.width
-        horizontalAlignment: Text.AlignRight
-        anchors {
-            bottom: current.bottom
-            right: current.right
-            rightMargin: 5
-        }
+        id: txt1
+        x: (parent.width - val)/2 - 48
+        y: 160
+        width: 53
+        height: 31
+        color: "#7d8fe8"
+        text: current.temp_max
+        horizontalAlignment: Text.AlignHCenter
+        font.family: "Times New Roman"
+        font.pointSize: 22
+    }
+
+    Text {
+        id: txt2
+        x:(parent.width - val)/2 + 20
+        y: 160
+        width: 54
+        height: 28
+        color: "#7d8fe8"
+        text: "Min:"
+        horizontalAlignment: Text.AlignHCenter
+        font.family: "Times New Roman"
+        font.pointSize: 22
+    }
+
+    Text {
+        id: txt3
+        x: (parent.width - val)/2 + 94
+        y: 160
+        width: 54
+        height: 28
+        color: "#7d8fe8"
+        text: current.temp_min
+        horizontalAlignment: Text.AlignHCenter
+        font.family: "Times New Roman"
+        font.pointSize: 22
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}D{i:2}
+}
+##^##*/

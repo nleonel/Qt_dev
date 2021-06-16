@@ -65,12 +65,14 @@
 #include <QUrlQuery>
 #include <QElapsedTimer>
 #include <QLoggingCategory>
+#include <QVector>
 
 /*
  *This application uses http://openweathermap.org/api
  **/
 
 #define ZERO_KELVIN 273.15
+
 
 Q_LOGGING_CATEGORY(requestsLog,"wapp.requests")
 
@@ -84,7 +86,10 @@ WeatherData::WeatherData(const WeatherData &other) :
         m_dayOfWeek(other.m_dayOfWeek),
         m_weather(other.m_weather),
         m_weatherDescription(other.m_weatherDescription),
-        m_temperature(other.m_temperature)
+        m_temperature(other.m_temperature),
+        m_presure(other.m_presure),
+        m_humidity(other.m_humidity)
+
 {
 }
 
@@ -112,9 +117,24 @@ QString WeatherData::weatherDescription() const
     return m_weatherDescription;
 }
 
-QString WeatherData::temperature() const
+QVector<QString>  WeatherData::temperatures()const
 {
-    return m_temperature;
+    return  m_temperatures;
+}
+
+QString WeatherData::temperature()const
+{
+    return  m_temperature;
+}
+
+QString WeatherData::presure() const
+{
+    return m_presure;
+}
+
+QString WeatherData::humidity() const
+{
+    return m_humidity;
 }
 
 void WeatherData::setDayOfWeek(const QString &value)
@@ -134,10 +154,28 @@ void WeatherData::setWeatherDescription(const QString &value)
     m_weatherDescription = value;
     emit dataChanged();
 }
+void WeatherData::setTemperatures(QVector<QString> &value)
+{
+
+    m_temperatures = value;
+    emit dataChanged();
+}
 
 void WeatherData::setTemperature(const QString &value)
 {
     m_temperature = value;
+    emit dataChanged();
+}
+
+void WeatherData::setPresure(const QString &value)
+{
+    m_presure = value;
+    emit dataChanged();
+}
+
+void WeatherData::setHumidity(const QString &value)
+{
+    m_humidity = value;
     emit dataChanged();
 }
 
@@ -236,6 +274,7 @@ AppModel::AppModel(QObject *parent) :
         this->networkSessionOpened();
     // tell the system we want network
     d->ns->open();
+
 }
 //! [1]
 
@@ -250,7 +289,8 @@ AppModel::~AppModel()
 //! [2]
 void AppModel::networkSessionOpened()
 {
-    d->src = QGeoPositionInfoSource::createDefaultSource(this);
+    //d->src = QGeoPositionInfoSource::createDefaultSource(this);
+    d->src = NULL;
 
     if (d->src) {
         d->useGps = true;
@@ -261,10 +301,15 @@ void AppModel::networkSessionOpened()
         d->src->startUpdates();
     } else {
         d->useGps = false;
-        d->city = "Brisbane";
+        //d->city = "Brisbane";
+        d->city = "?";
         emit cityChanged();
+
+        /* use for debug without gps source*/
+        queryCity();
         this->refreshWeather();
     }
+
 }
 //! [2]
 
@@ -272,16 +317,19 @@ void AppModel::networkSessionOpened()
 void AppModel::positionUpdated(QGeoPositionInfo gpsPos)
 {
     d->coord = gpsPos.coordinate();
+    qDebug() << "coord ? : " << d->coord;
 
     if (!(d->useGps))
         return;
 
     queryCity();
+
 }
 //! [3]
 
 void AppModel::queryCity()
 {
+    qDebug() << "city not queried ? : ";
     //don't update more often then once a minute
     //to keep load on server low
     if (d->throttle.isValid() && d->throttle.elapsed() < d->minMsBeforeNewRequest ) {
@@ -295,14 +343,18 @@ void AppModel::queryCity()
     d->minMsBeforeNewRequest = (d->nErrors + 1) * d->baseMsBeforeNewRequest;
 
     QString latitude, longitude;
-    longitude.setNum(d->coord.longitude());
-    latitude.setNum(d->coord.latitude());
+    //longitude.setNum(d->coord.longitude());
+    //latitude.setNum(d->coord.latitude());
+    longitude.setNum(7.683070);
+    latitude.setNum(45.068371);
 
-    QUrl url("http://api.openweathermap.org/data/2.5/weather");
+    QUrl url("http://api.openweathermap.org/data/2.5/weather?");
     QUrlQuery query;
     query.addQueryItem("lat", latitude);
     query.addQueryItem("lon", longitude);
+    //query.addQueryItem("q", "Grugliasco");
     query.addQueryItem("mode", "json");
+    query.addQueryItem("lang", "it");
     query.addQueryItem("APPID", d->app_ident);
     url.setQuery(query);
     qCDebug(requestsLog) << "submitting request";
@@ -360,6 +412,7 @@ void AppModel::handleGeoNetworkData(QNetworkReply *networkReply)
 
         const QString city = jv.toString();
         qCDebug(requestsLog) << "got city: " << city;
+        qDebug() << "got city: " << city;
         if (city != d->city) {
             d->city = city;
             emit cityChanged();
@@ -383,6 +436,7 @@ void AppModel::refreshWeather()
 
     query.addQueryItem("q", d->city);
     query.addQueryItem("mode", "json");
+    query.addQueryItem("lang", "fr");
     query.addQueryItem("APPID", d->app_ident);
     url.setQuery(query);
 
@@ -399,6 +453,8 @@ static QString niceTemperatureString(double t)
 
 void AppModel::handleWeatherNetworkData(QNetworkReply *networkReply)
 {
+     QVector<QString>  tempDatas;
+     QString  tempData;
     qCDebug(requestsLog) << "got weather network data";
     if (!networkReply)
         return;
@@ -418,6 +474,7 @@ void AppModel::handleWeatherNetworkData(QNetworkReply *networkReply)
             if (obj.contains(QStringLiteral("weather"))) {
                 val = obj.value(QStringLiteral("weather"));
                 QJsonArray weatherArray = val.toArray();
+                qDebug() << "weatherArray : " << weatherArray;
                 val = weatherArray.at(0);
                 tempObject = val.toObject();
                 d->now.setWeatherDescription(tempObject.value(QStringLiteral("description")).toString());
@@ -426,8 +483,24 @@ void AppModel::handleWeatherNetworkData(QNetworkReply *networkReply)
             if (obj.contains(QStringLiteral("main"))) {
                 val = obj.value(QStringLiteral("main"));
                 tempObject = val.toObject();
-                val = tempObject.value(QStringLiteral("temp"));
-                d->now.setTemperature(niceTemperatureString(val.toDouble()));
+                qDebug() << "weatherArray : " << tempObject;
+                //val = tempObject.value(QStringLiteral("temp"));
+                tempDatas.clear();
+                tempData = niceTemperatureString(tempObject.value(QStringLiteral("temp")).toDouble());
+                tempDatas << tempData;
+                tempData = niceTemperatureString(tempObject.value(QStringLiteral("temp_max")).toDouble());
+                tempDatas << tempData;
+                tempData = niceTemperatureString(tempObject.value(QStringLiteral("temp_min")).toDouble());
+                tempDatas << tempData;
+                d->now.setTemperatures(tempDatas);
+
+                tempData.clear();
+                tempData = "hPa " +  QString::number(tempObject.value(QStringLiteral("pressure")).toDouble());
+               d->now.setPresure(tempData);
+               tempData.clear();
+                tempData = "% " +  QString::number(tempObject.value(QStringLiteral("humidity")).toDouble());
+               d->now.setHumidity(tempData);
+               //qDebug() << "humidity : " << tempData;
             }
         }
     }
@@ -451,7 +524,7 @@ void AppModel::handleWeatherNetworkData(QNetworkReply *networkReply)
 
 void AppModel::handleForecastNetworkData(QNetworkReply *networkReply)
 {
-    qCDebug(requestsLog) << "got forecast";
+    qDebug(requestsLog) << "got forecast";
     if (!networkReply)
         return;
 

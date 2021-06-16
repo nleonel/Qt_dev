@@ -58,6 +58,8 @@
 
 #include <QtPositioning/QGeoPositionInfoSource>
 
+#include <QVector>
+
 //! [0]
 class WeatherData : public QObject {
     Q_OBJECT
@@ -73,6 +75,15 @@ class WeatherData : public QObject {
     Q_PROPERTY(QString temperature
                READ temperature WRITE setTemperature
                NOTIFY dataChanged)
+    Q_PROPERTY(QVector<QString> temperatures
+               READ temperatures WRITE setTemperatures
+               NOTIFY dataChanged)
+    Q_PROPERTY(QString presure
+               READ presure WRITE setPresure
+               NOTIFY dataChanged)
+    Q_PROPERTY(QString humidity
+               READ humidity WRITE setHumidity
+               NOTIFY dataChanged)
 
 public:
     explicit WeatherData(QObject *parent = 0);
@@ -82,11 +93,17 @@ public:
     QString weatherIcon() const;
     QString weatherDescription() const;
     QString temperature() const;
+    QVector<QString> temperatures() const;
+    QString presure()const;
+    QString humidity()const;
 
     void setDayOfWeek(const QString &value);
     void setWeatherIcon(const QString &value);
     void setWeatherDescription(const QString &value);
     void setTemperature(const QString &value);
+    void setTemperatures(QVector<QString> &value);
+    void setPresure(const QString &value);
+    void setHumidity(const QString &value);
 
 signals:
     void dataChanged();
@@ -95,7 +112,10 @@ private:
     QString m_dayOfWeek;
     QString m_weather;
     QString m_weatherDescription;
-    QString m_temperature;
+    QVector<QString>  m_temperatures;
+    QString  m_temperature;
+    QString m_presure;
+    QString m_humidity;
 //! [1]
 };
 //! [1]

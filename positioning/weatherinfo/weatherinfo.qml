@@ -52,12 +52,14 @@ import QtQuick 2.0
 import "components"
 //! [0]
 import WeatherInfo 1.0
+import QtQuick.Controls 2.13
 
-Item {
+Rectangle {
     id: window
 //! [0]
     width: 360
-    height: 640
+    height: 700
+    color: "lightblue"
 
     state: "loading"
 
@@ -87,6 +89,10 @@ Item {
     Item {
         id: wait
         anchors.fill: parent
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
 
         Text {
             text: "Loading weather data..."
@@ -98,6 +104,10 @@ Item {
     Item {
         id: main
         anchors.fill: parent
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
 
         Column {
             spacing: 6
@@ -108,36 +118,63 @@ Item {
             }
 
             Rectangle {
-                width: parent.width
-                height: 25
-                color: "lightgrey"
+                id: city
+                x: parent.width/3 + 20
+                y: 20
+                width: 250
+                height: 75
+                radius: 12
+                color: "#f5f7fa"
+//                gradient: Gradient {
+//                    GradientStop {
+//                        position: 0
+//                        color: "#f5f7fa"
+//                    }
+
+//                    GradientStop {
+//                        position: 1
+//                        color: "#c3cfe2"
+//                    }
+//                }
 
                 Text {
                     text: (model.hasValidCity ? model.city : "Unknown location") + (model.useGps ? " (GPS)" : "")
                     anchors.fill: parent
+                    font.pixelSize: 70
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    font.family: "Times New Roman"
+                    textFormat: Text.RichText
+                    fontSizeMode: Text.Fit
+                    color: "blue"
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 71
+                    anchors.topMargin: 0
+                    anchors.leftMargin: 0
                     onClicked: {
                         if (model.useGps) {
                             model.useGps = false
                             model.city = "Brisbane"
                         } else {
                             switch (model.city) {
-                            case "Brisbane":
-                                model.city = "Oslo"
+                            case "Torino":
+                                model.city = "Milano"
                                 break
-                            case "Oslo":
-                                model.city = "Helsinki"
+                            case "Milano":
+                                model.city = "Paris"
                                 break
-                            case "Helsinki":
-                                model.city = "New York"
+                            case "Paris":
+                                model.city = "Douala"
                                 break
-                            case "New York":
-                                model.useGps = true
+                            case "Douala":
+                                model.useGps = false
+                                model.city = "Torino"
                                 break
                             }
                         }
@@ -150,21 +187,32 @@ Item {
                 id: current
 
                 width: main.width -12
-                height: 2 * (main.height - 25 - 12) / 3
+                height: 2 * (main.height - 25 - 12) / 4
 
                 weatherIcon: (model.hasValidWeather
                           ? model.weather.weatherIcon
                           : "01d")
 //! [3]
                 topText: (model.hasValidWeather
-                          ? model.weather.temperature
+                          ? model.weather.temperatures[0]
                           : "??")
+                temp_min: (model.hasValidWeather
+                          ? model.weather.temperatures[2]
+                          : "??")
+                temp_max: (model.hasValidWeather
+                          ? model.weather.temperatures[1]
+                          : "??")
+
                 bottomText: (model.hasValidWeather
                              ? model.weather.weatherDescription
                              : "No weather data")
 
                 MouseArea {
                     anchors.fill: parent
+                    anchors.rightMargin: 0
+                    anchors.bottomMargin: 51
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
                     onClicked: {
                         model.refreshWeather()
                     }
@@ -187,6 +235,8 @@ Item {
                     id: forecast1
                     width: iconRow.iconWidth
                     height: iconRow.iconHeight
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
 
                     topText: (model.hasValidWeather ?
                               model.forecast[0].dayOfWeek : "??")
@@ -199,6 +249,8 @@ Item {
                     id: forecast2
                     width: iconRow.iconWidth
                     height: iconRow.iconHeight
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
 
                     topText: (model.hasValidWeather ?
                               model.forecast[1].dayOfWeek : "??")
@@ -211,6 +263,8 @@ Item {
                     id: forecast3
                     width: iconRow.iconWidth
                     height: iconRow.iconHeight
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
 
                     topText: (model.hasValidWeather ?
                               model.forecast[2].dayOfWeek : "??")
@@ -223,16 +277,41 @@ Item {
                     id: forecast4
                     width: iconRow.iconWidth
                     height: iconRow.iconHeight
+                    anchors.bottom: parent.bottom
 
                     topText: (model.hasValidWeather ?
                               model.forecast[3].dayOfWeek : "??")
                     bottomText: (model.hasValidWeather ?
                                  model.forecast[3].temperature : "??/??")
                     weatherIcon: (model.hasValidWeather ?
-                              model.forecast[3].weatherIcon : "01d")
+                                      model.forecast[3].weatherIcon : "01d")
                 }
 
             }
+        }
+        CustomLabel{
+            id: customLabel
+            x: 198
+            width: 162
+            height: 40
+            color: "#274908"
+            anchors.right: parent.right
+            anchors.top: parent.top
+            font.pixelSize: 42
+            horizontalAlignment: Text.AlignRight
+            anchors.topMargin: 10
+        }
+
+        WeatherLabel{
+            id: fore
+            x: 8
+            y: 39
+            width: 186
+            height: 47
+            weatherIcon: "humidity"
+            humidity: model.weather.humidity
+            pressure: model.weather.presure
+            pixels: 28
         }
     }
 //! [2]

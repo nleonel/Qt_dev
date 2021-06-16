@@ -16,5 +16,9 @@
         <file>icons/weather-sunny-very-few-clouds.png</file>
         <file>icons/weather-sunny.png</file>
         <file>icons/weather-thundershower.png</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>components/CustomLabel.qml</file>
+        <file>icons/humidity.png</file>
+        <file>components/WeatherLabel.qml</file>
     </qresource>
 </RCC>
