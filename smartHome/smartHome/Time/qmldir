@@ -1,0 +1,3 @@
+module Time
+singleton Timer 1.0 Timer.qml
+CustomTime 1.0 CustomTime.qml

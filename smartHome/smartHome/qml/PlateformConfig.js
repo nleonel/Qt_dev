@@ -1,0 +1,16 @@
+
+{
+  "device" : "/dev/dri/card0",
+  "hwcursor": false,
+  "pbuffers": true,
+  "outputs": [
+    {
+      "name": "VGA1",
+      "mode": "off"
+    },
+    {
+      "name": "HDMI1",
+      "mode": "1024x768"
+    }
+  ]
+}

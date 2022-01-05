@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>components/BigForecastIcon.qml</file>
+        <file>components/ForecastIcon.qml</file>
+        <file>components/WeatherIcon.qml</file>
+        <file>icons/weather-few-clouds.png</file>
+        <file>icons/weather-fog.png</file>
+        <file>icons/weather-haze.png</file>
+        <file>icons/weather-icy.png</file>
+        <file>icons/weather-overcast.png</file>
+        <file>icons/weather-showers.png</file>
+        <file>icons/weather-sleet.png</file>
+        <file>icons/weather-snow.png</file>
+        <file>icons/weather-storm.png</file>
+        <file>icons/weather-sunny-very-few-clouds.png</file>
+        <file>icons/weather-sunny.png</file>
+        <file>icons/weather-thundershower.png</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>components/CustomLabel.qml</file>
+        <file>icons/humidity.png</file>
+        <file>components/WeatherLabel.qml</file>
+        <file>qmldir</file>
+        <file>Weatherinfo.pro</file>
+        <file>appmodel.cpp</file>
+        <file>appmodel.h</file>
+        <file>main.cpp</file>
+        <file>Weatherinfo.qml</file>
+    </qresource>
+</RCC>

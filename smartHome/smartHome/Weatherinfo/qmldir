@@ -1,0 +1,8 @@
+module Weatherinfo
+Weatherinfo 1.0                 Weatherinfo.qml
+WeatherIcon 1.0      components/WeatherIcon.qml
+ForecastIcon 1.0     components/ForecastIcon.qml
+BigForecastIcon 1.0  components/BigForecastIcon.qml
+CustomLabel 1.0      components/CustomLabel.qml
+icons 1.0 icons/*
+
